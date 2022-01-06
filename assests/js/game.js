@@ -4,28 +4,40 @@
 //  * Defeat each enemy-robot
 // "LOSE" - Player robot's health is zero or less
 
-
+var fightOrSkip = function() {
+    // ask player if they'd like to fight or skip using fightOrSkip function
+    var promptFight = window.prompt('Would you like to FIGHT or SKIP this battle? Enter "FIGHT" or "SKIP" to choose.');
+    promptFight = promptFight.toLocaleLowerCase();
+    
+    // Conditional Recursive Function Call
+    if (promptFight === "" || promptFight === null) {
+    window.alert("You need to provide a valid answer! Please try again.");
+    return fightOrSkip();
+    }
+  
+    // if player picks "skip" confirm and then stop the loop
+    if (promptFight === "skip") {
+      // confirm player wants to skip
+      var confirmSkip = window.confirm("Are you sure you'd like to quit?");
+  
+      // if yes (true), leave fight
+      if (confirmSkip) {
+        window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
+        // subtract money from playerMoney for skipping
+        playerInfo.playerMoney = playerInfo.money - 10;
+        return true;
+      }
+    }
+    return false;
+  }
 
 var fight = function(enemy) {
 
     while(enemy.health > 0 && playerInfo.health > 0) {
     // Ask Player if they'd like to fight or run
-    var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.")
-
-    // if player picks "skip" confirm and then stop the loop
-    if (promptFight === "SKIP" || promptFight === "skip") {
-        // Confirm Player Wants to skip
-        var confirmSkip = window.confirm("Are you sure you'd like to quit?")
-    
-        // if yes (true), leave fight
-        if (confirmSkip) {
-            window.alert(playerInfo.name + " has chosen to skip the fight!")
-            // Subtract Money from playerInfo.money for skipping
-         playerInfo.money = Math.max(0, playerInfo.money - 10);
-            console.log("playerInfo.money", playerInfo.money)
-         break;
-    }
-}   
+        if (fightOrSkip()) {
+            break;
+        }  
 
     //Subtract the value of `playerInfo.attack` from the value of `enemyHealth` and use that result to update the value in the `enemyHealth` variable
     var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack)
